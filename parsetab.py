@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEDIVIDE EQUALS FLOAT INT MINUS MULTIPLY NAME PLUS\n    calc : expression\n        | var_assign\n        | empty\n    \n    var_assign : NAME EQUALS expression\n    \n    expression : expression MULTIPLY expression\n                | expression DIVIDE expression \n                | expression PLUS expression\n                | expression MINUS expression\n\n    \n    expression : INT\n              | FLOAT\n\n    \n    expression : NAME\n    \n    empty : \n\n    '
+_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDECOMMA DIVIDE EQUALS FLOAT INT LRB MINUS MULTIPLY NAME PLUS PRINT RRB SEMICOLON STRING\n    calc : expression\n        | var_assign\n        | empty\n    \n    expression : PRINT LRB expression RRB\n    \n    var_assign : NAME EQUALS expression\n    \n    expression : expression MULTIPLY expression\n                | expression DIVIDE expression \n                | expression PLUS expression\n                | expression MINUS expression\n\n    \n    expression : INT\n              | FLOAT\n              | STRING\n    \n    expression : NAME\n    \n    empty : \n\n    '
     
-_lr_action_items = {'INT':([0,8,9,10,11,12,],[5,5,5,5,5,5,]),'FLOAT':([0,8,9,10,11,12,],[6,6,6,6,6,6,]),'NAME':([0,8,9,10,11,12,],[7,14,14,14,14,14,]),'$end':([0,1,2,3,4,5,6,7,13,14,15,16,17,18,],[-12,0,-1,-2,-3,-9,-10,-11,-5,-11,-6,-7,-8,-4,]),'MULTIPLY':([2,5,6,7,13,14,15,16,17,18,],[8,-9,-10,-11,-5,-11,-6,8,8,8,]),'DIVIDE':([2,5,6,7,13,14,15,16,17,18,],[9,-9,-10,-11,-5,-11,-6,9,9,9,]),'PLUS':([2,5,6,7,13,14,15,16,17,18,],[10,-9,-10,-11,-5,-11,-6,-7,-8,10,]),'MINUS':([2,5,6,7,13,14,15,16,17,18,],[11,-9,-10,-11,-5,-11,-6,-7,-8,11,]),'EQUALS':([7,],[12,]),}
+_lr_action_items = {'PRINT':([0,10,11,12,13,14,15,],[5,5,5,5,5,5,5,]),'INT':([0,10,11,12,13,14,15,],[6,6,6,6,6,6,6,]),'FLOAT':([0,10,11,12,13,14,15,],[7,7,7,7,7,7,7,]),'STRING':([0,10,11,12,13,14,15,],[8,8,8,8,8,8,8,]),'NAME':([0,10,11,12,13,14,15,],[9,17,17,17,17,17,17,]),'$end':([0,1,2,3,4,6,7,8,9,16,17,18,19,20,22,23,],[-14,0,-1,-2,-3,-10,-11,-12,-13,-6,-13,-7,-8,-9,-5,-4,]),'MULTIPLY':([2,6,7,8,9,16,17,18,19,20,21,22,23,],[10,-10,-11,-12,-13,-6,-13,-7,10,10,10,10,-4,]),'DIVIDE':([2,6,7,8,9,16,17,18,19,20,21,22,23,],[11,-10,-11,-12,-13,-6,-13,-7,11,11,11,11,-4,]),'PLUS':([2,6,7,8,9,16,17,18,19,20,21,22,23,],[12,-10,-11,-12,-13,-6,-13,-7,-8,-9,12,12,-4,]),'MINUS':([2,6,7,8,9,16,17,18,19,20,21,22,23,],[13,-10,-11,-12,-13,-6,-13,-7,-8,-9,13,13,-4,]),'LRB':([5,],[14,]),'RRB':([6,7,8,16,17,18,19,20,21,23,],[-10,-11,-12,-6,-13,-7,-8,-9,23,-4,]),'EQUALS':([9,],[15,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,8,9,10,11,12,],[2,13,15,16,17,18,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),}
+_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,10,11,12,13,14,15,],[2,16,18,19,20,21,22,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,16 +27,18 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> calc","S'",1,None,None,None),
-  ('calc -> expression','calc',1,'p_calc','parser.py',13),
-  ('calc -> var_assign','calc',1,'p_calc','parser.py',14),
-  ('calc -> empty','calc',1,'p_calc','parser.py',15),
-  ('var_assign -> NAME EQUALS expression','var_assign',3,'p_var_assign','parser.py',22),
-  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','parser.py',29),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression','parser.py',30),
-  ('expression -> expression PLUS expression','expression',3,'p_expression','parser.py',31),
-  ('expression -> expression MINUS expression','expression',3,'p_expression','parser.py',32),
-  ('expression -> INT','expression',1,'p_expression_int_float','parser.py',40),
-  ('expression -> FLOAT','expression',1,'p_expression_int_float','parser.py',41),
-  ('expression -> NAME','expression',1,'p_expression_var','parser.py',49),
-  ('empty -> <empty>','empty',0,'p_empty','parser.py',56),
+  ('calc -> expression','calc',1,'p_calc','myParser.py',13),
+  ('calc -> var_assign','calc',1,'p_calc','myParser.py',14),
+  ('calc -> empty','calc',1,'p_calc','myParser.py',15),
+  ('expression -> PRINT LRB expression RRB','expression',4,'p_expression_print','myParser.py',24),
+  ('var_assign -> NAME EQUALS expression','var_assign',3,'p_var_assign','myParser.py',31),
+  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','myParser.py',38),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression','myParser.py',39),
+  ('expression -> expression PLUS expression','expression',3,'p_expression','myParser.py',40),
+  ('expression -> expression MINUS expression','expression',3,'p_expression','myParser.py',41),
+  ('expression -> INT','expression',1,'p_expression_int_float_string','myParser.py',49),
+  ('expression -> FLOAT','expression',1,'p_expression_int_float_string','myParser.py',50),
+  ('expression -> STRING','expression',1,'p_expression_int_float_string','myParser.py',51),
+  ('expression -> NAME','expression',1,'p_expression_var','myParser.py',58),
+  ('empty -> <empty>','empty',0,'p_empty','myParser.py',65),
 ]

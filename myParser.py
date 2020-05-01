@@ -14,7 +14,16 @@ def p_calc(p):
         | var_assign
         | empty
     '''
-    print(run(p[1]))
+    print(p[1])
+
+
+######## STANDARD OUTPUT ##########
+
+def p_expression_print(p):
+    '''
+    expression : PRINT LRB expression RRB
+    '''
+    p[0] = ('print', p[3])
 
 
 def p_var_assign(p):
@@ -35,11 +44,11 @@ def p_expression(p):
     p[0] = (p[2], p[1], p[3])
 
 
-def p_expression_int_float(p):
+def p_expression_int_float_string(p):
     '''
     expression : INT
               | FLOAT
-
+              | STRING
     '''
     p[0] = p[1]
 
@@ -63,9 +72,8 @@ def p_error(p):
     print("Syntax Error Found")
 
 
-
-
 variableValues = {}
+
 
 def run(p):
     if type(p) == tuple:
@@ -89,5 +97,4 @@ def run(p):
         return p
 
 
-myParser = yacc.yacc()
-
+parser = yacc.yacc()

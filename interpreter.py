@@ -1,10 +1,10 @@
 
 import ply.yacc as yacc
-from myParser import myParser
+from myParser import parser
 
 while True:
     try:
         s = input('>> ')
     except EOFError:
         break
-    myParser.parse(s)
+    parser.parse(s)
