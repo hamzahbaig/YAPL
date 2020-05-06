@@ -59,10 +59,7 @@ def t_INT(t):
 
 def t_NAME(t):
     r'[a-zA-z_][a-zA-Z_0-9]*'
-    if t.value == "PRINT":
-        t.type = 'PRINT'
-    else:
-        t.type = 'NAME'
+    t.type = 'NAME'
     return t
 
 

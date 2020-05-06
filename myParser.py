@@ -14,16 +14,8 @@ def p_calc(p):
         | var_assign
         | empty
     '''
-    print(p[1])
+    print(run(p[1]))
 
-
-######## STANDARD OUTPUT ##########
-
-def p_expression_print(p):
-    '''
-    expression : PRINT LRB expression RRB
-    '''
-    p[0] = ('print', p[3])
 
 
 def p_var_assign(p):
