@@ -2,53 +2,61 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    COMMA
-    LRB
-    PRINT
-    RRB
     SEMICOLON
 
 Grammar
 
 Rule 0     S' -> calc
 Rule 1     calc -> expression
-Rule 2     calc -> var_assign
+Rule 2     calc -> var_declaration
 Rule 3     calc -> empty
-Rule 4     var_assign -> NAME EQUALS expression
-Rule 5     expression -> expression MULTIPLY expression
-Rule 6     expression -> expression DIVIDE expression
-Rule 7     expression -> expression PLUS expression
-Rule 8     expression -> expression MINUS expression
-Rule 9     expression -> INT
-Rule 10    expression -> FLOAT
-Rule 11    expression -> STRING
-Rule 12    expression -> NAME
-Rule 13    empty -> <empty>
+Rule 4     expression -> PRINT LRB optargs RRB
+Rule 5     optargs -> args
+Rule 6     optargs -> <empty>
+Rule 7     args -> expression COMMA args
+Rule 8     args -> expression
+Rule 9     var_declaration -> TYPEINT IDENTIFIER EQUALS INT
+Rule 10    var_declaration -> TYPEDOUBLE IDENTIFIER EQUALS DOUBLE
+Rule 11    var_declaration -> TYPESTRING IDENTIFIER EQUALS STRING
+Rule 12    expression -> expression MULTIPLY expression
+Rule 13    expression -> expression DIVIDE expression
+Rule 14    expression -> expression PLUS expression
+Rule 15    expression -> expression MINUS expression
+Rule 16    expression -> INT
+Rule 17    expression -> DOUBLE
+Rule 18    expression -> STRING
+Rule 19    expression -> IDENTIFIER
+Rule 20    empty -> <empty>
 
 Terminals, with rules where they appear
 
-COMMA                : 
-DIVIDE               : 6
-EQUALS               : 4
-FLOAT                : 10
-INT                  : 9
-LRB                  : 
-MINUS                : 8
-MULTIPLY             : 5
-NAME                 : 4 12
-PLUS                 : 7
-PRINT                : 
-RRB                  : 
+COMMA                : 7
+DIVIDE               : 13
+DOUBLE               : 10 17
+EQUALS               : 9 10 11
+IDENTIFIER           : 9 10 11 19
+INT                  : 9 16
+LRB                  : 4
+MINUS                : 15
+MULTIPLY             : 12
+PLUS                 : 14
+PRINT                : 4
+RRB                  : 4
 SEMICOLON            : 
-STRING               : 11
+STRING               : 11 18
+TYPEDOUBLE           : 10
+TYPEINT              : 9
+TYPESTRING           : 11
 error                : 
 
 Nonterminals, with rules where they appear
 
+args                 : 5 7
 calc                 : 0
 empty                : 3
-expression           : 1 4 5 5 6 6 7 7 8 8
-var_assign           : 2
+expression           : 1 7 8 12 12 13 13 14 14 15 15
+optargs              : 4
+var_declaration      : 2
 
 Parsing method: LALR
 
@@ -56,28 +64,35 @@ state 0
 
     (0) S' -> . calc
     (1) calc -> . expression
-    (2) calc -> . var_assign
+    (2) calc -> . var_declaration
     (3) calc -> . empty
-    (5) expression -> . expression MULTIPLY expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . expression PLUS expression
-    (8) expression -> . expression MINUS expression
-    (9) expression -> . INT
-    (10) expression -> . FLOAT
-    (11) expression -> . STRING
-    (12) expression -> . NAME
-    (4) var_assign -> . NAME EQUALS expression
-    (13) empty -> .
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
+    (9) var_declaration -> . TYPEINT IDENTIFIER EQUALS INT
+    (10) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS DOUBLE
+    (11) var_declaration -> . TYPESTRING IDENTIFIER EQUALS STRING
+    (20) empty -> .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    STRING          shift and go to state 7
-    NAME            shift and go to state 8
-    $end            reduce using rule 13 (empty -> .)
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
+    TYPEINT         shift and go to state 10
+    TYPEDOUBLE      shift and go to state 11
+    TYPESTRING      shift and go to state 12
+    $end            reduce using rule 20 (empty -> .)
 
     calc                           shift and go to state 1
     expression                     shift and go to state 2
-    var_assign                     shift and go to state 3
+    var_declaration                shift and go to state 3
     empty                          shift and go to state 4
 
 state 1
@@ -89,23 +104,23 @@ state 1
 state 2
 
     (1) calc -> expression .
-    (5) expression -> expression . MULTIPLY expression
-    (6) expression -> expression . DIVIDE expression
-    (7) expression -> expression . PLUS expression
-    (8) expression -> expression . MINUS expression
+    (12) expression -> expression . MULTIPLY expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
 
     $end            reduce using rule 1 (calc -> expression .)
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-    PLUS            shift and go to state 11
-    MINUS           shift and go to state 12
+    MULTIPLY        shift and go to state 13
+    DIVIDE          shift and go to state 14
+    PLUS            shift and go to state 15
+    MINUS           shift and go to state 16
 
 
 state 3
 
-    (2) calc -> var_assign .
+    (2) calc -> var_declaration .
 
-    $end            reduce using rule 2 (calc -> var_assign .)
+    $end            reduce using rule 2 (calc -> var_declaration .)
 
 
 state 4
@@ -117,247 +132,418 @@ state 4
 
 state 5
 
-    (9) expression -> INT .
+    (4) expression -> PRINT . LRB optargs RRB
 
-    MULTIPLY        reduce using rule 9 (expression -> INT .)
-    DIVIDE          reduce using rule 9 (expression -> INT .)
-    PLUS            reduce using rule 9 (expression -> INT .)
-    MINUS           reduce using rule 9 (expression -> INT .)
-    $end            reduce using rule 9 (expression -> INT .)
+    LRB             shift and go to state 17
 
 
 state 6
 
-    (10) expression -> FLOAT .
+    (16) expression -> INT .
 
-    MULTIPLY        reduce using rule 10 (expression -> FLOAT .)
-    DIVIDE          reduce using rule 10 (expression -> FLOAT .)
-    PLUS            reduce using rule 10 (expression -> FLOAT .)
-    MINUS           reduce using rule 10 (expression -> FLOAT .)
-    $end            reduce using rule 10 (expression -> FLOAT .)
+    MULTIPLY        reduce using rule 16 (expression -> INT .)
+    DIVIDE          reduce using rule 16 (expression -> INT .)
+    PLUS            reduce using rule 16 (expression -> INT .)
+    MINUS           reduce using rule 16 (expression -> INT .)
+    $end            reduce using rule 16 (expression -> INT .)
+    COMMA           reduce using rule 16 (expression -> INT .)
+    RRB             reduce using rule 16 (expression -> INT .)
 
 
 state 7
 
-    (11) expression -> STRING .
+    (17) expression -> DOUBLE .
 
-    MULTIPLY        reduce using rule 11 (expression -> STRING .)
-    DIVIDE          reduce using rule 11 (expression -> STRING .)
-    PLUS            reduce using rule 11 (expression -> STRING .)
-    MINUS           reduce using rule 11 (expression -> STRING .)
-    $end            reduce using rule 11 (expression -> STRING .)
+    MULTIPLY        reduce using rule 17 (expression -> DOUBLE .)
+    DIVIDE          reduce using rule 17 (expression -> DOUBLE .)
+    PLUS            reduce using rule 17 (expression -> DOUBLE .)
+    MINUS           reduce using rule 17 (expression -> DOUBLE .)
+    $end            reduce using rule 17 (expression -> DOUBLE .)
+    COMMA           reduce using rule 17 (expression -> DOUBLE .)
+    RRB             reduce using rule 17 (expression -> DOUBLE .)
 
 
 state 8
 
-    (12) expression -> NAME .
-    (4) var_assign -> NAME . EQUALS expression
+    (18) expression -> STRING .
 
-    MULTIPLY        reduce using rule 12 (expression -> NAME .)
-    DIVIDE          reduce using rule 12 (expression -> NAME .)
-    PLUS            reduce using rule 12 (expression -> NAME .)
-    MINUS           reduce using rule 12 (expression -> NAME .)
-    $end            reduce using rule 12 (expression -> NAME .)
-    EQUALS          shift and go to state 13
+    MULTIPLY        reduce using rule 18 (expression -> STRING .)
+    DIVIDE          reduce using rule 18 (expression -> STRING .)
+    PLUS            reduce using rule 18 (expression -> STRING .)
+    MINUS           reduce using rule 18 (expression -> STRING .)
+    $end            reduce using rule 18 (expression -> STRING .)
+    COMMA           reduce using rule 18 (expression -> STRING .)
+    RRB             reduce using rule 18 (expression -> STRING .)
 
 
 state 9
 
-    (5) expression -> expression MULTIPLY . expression
-    (5) expression -> . expression MULTIPLY expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . expression PLUS expression
-    (8) expression -> . expression MINUS expression
-    (9) expression -> . INT
-    (10) expression -> . FLOAT
-    (11) expression -> . STRING
-    (12) expression -> . NAME
+    (19) expression -> IDENTIFIER .
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    STRING          shift and go to state 7
-    NAME            shift and go to state 15
+    MULTIPLY        reduce using rule 19 (expression -> IDENTIFIER .)
+    DIVIDE          reduce using rule 19 (expression -> IDENTIFIER .)
+    PLUS            reduce using rule 19 (expression -> IDENTIFIER .)
+    MINUS           reduce using rule 19 (expression -> IDENTIFIER .)
+    $end            reduce using rule 19 (expression -> IDENTIFIER .)
+    COMMA           reduce using rule 19 (expression -> IDENTIFIER .)
+    RRB             reduce using rule 19 (expression -> IDENTIFIER .)
 
-    expression                     shift and go to state 14
 
 state 10
 
-    (6) expression -> expression DIVIDE . expression
-    (5) expression -> . expression MULTIPLY expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . expression PLUS expression
-    (8) expression -> . expression MINUS expression
-    (9) expression -> . INT
-    (10) expression -> . FLOAT
-    (11) expression -> . STRING
-    (12) expression -> . NAME
+    (9) var_declaration -> TYPEINT . IDENTIFIER EQUALS INT
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    STRING          shift and go to state 7
-    NAME            shift and go to state 15
+    IDENTIFIER      shift and go to state 18
 
-    expression                     shift and go to state 16
 
 state 11
 
-    (7) expression -> expression PLUS . expression
-    (5) expression -> . expression MULTIPLY expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . expression PLUS expression
-    (8) expression -> . expression MINUS expression
-    (9) expression -> . INT
-    (10) expression -> . FLOAT
-    (11) expression -> . STRING
-    (12) expression -> . NAME
+    (10) var_declaration -> TYPEDOUBLE . IDENTIFIER EQUALS DOUBLE
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    STRING          shift and go to state 7
-    NAME            shift and go to state 15
+    IDENTIFIER      shift and go to state 19
 
-    expression                     shift and go to state 17
 
 state 12
 
-    (8) expression -> expression MINUS . expression
-    (5) expression -> . expression MULTIPLY expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . expression PLUS expression
-    (8) expression -> . expression MINUS expression
-    (9) expression -> . INT
-    (10) expression -> . FLOAT
-    (11) expression -> . STRING
-    (12) expression -> . NAME
+    (11) var_declaration -> TYPESTRING . IDENTIFIER EQUALS STRING
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    STRING          shift and go to state 7
-    NAME            shift and go to state 15
+    IDENTIFIER      shift and go to state 20
 
-    expression                     shift and go to state 18
 
 state 13
 
-    (4) var_assign -> NAME EQUALS . expression
-    (5) expression -> . expression MULTIPLY expression
-    (6) expression -> . expression DIVIDE expression
-    (7) expression -> . expression PLUS expression
-    (8) expression -> . expression MINUS expression
-    (9) expression -> . INT
-    (10) expression -> . FLOAT
-    (11) expression -> . STRING
-    (12) expression -> . NAME
+    (12) expression -> expression MULTIPLY . expression
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
 
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    STRING          shift and go to state 7
-    NAME            shift and go to state 15
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
 
-    expression                     shift and go to state 19
+    expression                     shift and go to state 21
 
 state 14
 
-    (5) expression -> expression MULTIPLY expression .
-    (5) expression -> expression . MULTIPLY expression
-    (6) expression -> expression . DIVIDE expression
-    (7) expression -> expression . PLUS expression
-    (8) expression -> expression . MINUS expression
+    (13) expression -> expression DIVIDE . expression
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
 
-    MULTIPLY        reduce using rule 5 (expression -> expression MULTIPLY expression .)
-    DIVIDE          reduce using rule 5 (expression -> expression MULTIPLY expression .)
-    PLUS            reduce using rule 5 (expression -> expression MULTIPLY expression .)
-    MINUS           reduce using rule 5 (expression -> expression MULTIPLY expression .)
-    $end            reduce using rule 5 (expression -> expression MULTIPLY expression .)
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
 
-  ! MULTIPLY        [ shift and go to state 9 ]
-  ! DIVIDE          [ shift and go to state 10 ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
-
+    expression                     shift and go to state 22
 
 state 15
 
-    (12) expression -> NAME .
+    (14) expression -> expression PLUS . expression
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
 
-    MULTIPLY        reduce using rule 12 (expression -> NAME .)
-    DIVIDE          reduce using rule 12 (expression -> NAME .)
-    PLUS            reduce using rule 12 (expression -> NAME .)
-    MINUS           reduce using rule 12 (expression -> NAME .)
-    $end            reduce using rule 12 (expression -> NAME .)
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
 
+    expression                     shift and go to state 23
 
 state 16
 
-    (6) expression -> expression DIVIDE expression .
-    (5) expression -> expression . MULTIPLY expression
-    (6) expression -> expression . DIVIDE expression
-    (7) expression -> expression . PLUS expression
-    (8) expression -> expression . MINUS expression
+    (15) expression -> expression MINUS . expression
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
 
-    MULTIPLY        reduce using rule 6 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 6 (expression -> expression DIVIDE expression .)
-    PLUS            reduce using rule 6 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 6 (expression -> expression DIVIDE expression .)
-    $end            reduce using rule 6 (expression -> expression DIVIDE expression .)
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
 
-  ! MULTIPLY        [ shift and go to state 9 ]
-  ! DIVIDE          [ shift and go to state 10 ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
-
+    expression                     shift and go to state 24
 
 state 17
 
-    (7) expression -> expression PLUS expression .
-    (5) expression -> expression . MULTIPLY expression
-    (6) expression -> expression . DIVIDE expression
-    (7) expression -> expression . PLUS expression
-    (8) expression -> expression . MINUS expression
+    (4) expression -> PRINT LRB . optargs RRB
+    (5) optargs -> . args
+    (6) optargs -> .
+    (7) args -> . expression COMMA args
+    (8) args -> . expression
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
 
-    PLUS            reduce using rule 7 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 7 (expression -> expression PLUS expression .)
-    $end            reduce using rule 7 (expression -> expression PLUS expression .)
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
+    RRB             reduce using rule 6 (optargs -> .)
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
 
-  ! MULTIPLY        [ reduce using rule 7 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 7 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
-
+    optargs                        shift and go to state 25
+    args                           shift and go to state 26
+    expression                     shift and go to state 27
 
 state 18
 
-    (8) expression -> expression MINUS expression .
-    (5) expression -> expression . MULTIPLY expression
-    (6) expression -> expression . DIVIDE expression
-    (7) expression -> expression . PLUS expression
-    (8) expression -> expression . MINUS expression
+    (9) var_declaration -> TYPEINT IDENTIFIER . EQUALS INT
 
-    PLUS            reduce using rule 8 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 8 (expression -> expression MINUS expression .)
-    $end            reduce using rule 8 (expression -> expression MINUS expression .)
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-
-  ! MULTIPLY        [ reduce using rule 8 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 8 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 11 ]
-  ! MINUS           [ shift and go to state 12 ]
+    EQUALS          shift and go to state 28
 
 
 state 19
 
-    (4) var_assign -> NAME EQUALS expression .
-    (5) expression -> expression . MULTIPLY expression
-    (6) expression -> expression . DIVIDE expression
-    (7) expression -> expression . PLUS expression
-    (8) expression -> expression . MINUS expression
+    (10) var_declaration -> TYPEDOUBLE IDENTIFIER . EQUALS DOUBLE
 
-    $end            reduce using rule 4 (var_assign -> NAME EQUALS expression .)
-    MULTIPLY        shift and go to state 9
-    DIVIDE          shift and go to state 10
-    PLUS            shift and go to state 11
-    MINUS           shift and go to state 12
+    EQUALS          shift and go to state 29
+
+
+state 20
+
+    (11) var_declaration -> TYPESTRING IDENTIFIER . EQUALS STRING
+
+    EQUALS          shift and go to state 30
+
+
+state 21
+
+    (12) expression -> expression MULTIPLY expression .
+    (12) expression -> expression . MULTIPLY expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
+
+    MULTIPLY        reduce using rule 12 (expression -> expression MULTIPLY expression .)
+    DIVIDE          reduce using rule 12 (expression -> expression MULTIPLY expression .)
+    PLUS            reduce using rule 12 (expression -> expression MULTIPLY expression .)
+    MINUS           reduce using rule 12 (expression -> expression MULTIPLY expression .)
+    $end            reduce using rule 12 (expression -> expression MULTIPLY expression .)
+    COMMA           reduce using rule 12 (expression -> expression MULTIPLY expression .)
+    RRB             reduce using rule 12 (expression -> expression MULTIPLY expression .)
+
+  ! MULTIPLY        [ shift and go to state 13 ]
+  ! DIVIDE          [ shift and go to state 14 ]
+  ! PLUS            [ shift and go to state 15 ]
+  ! MINUS           [ shift and go to state 16 ]
+
+
+state 22
+
+    (13) expression -> expression DIVIDE expression .
+    (12) expression -> expression . MULTIPLY expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
+
+    MULTIPLY        reduce using rule 13 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 13 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 13 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 13 (expression -> expression DIVIDE expression .)
+    $end            reduce using rule 13 (expression -> expression DIVIDE expression .)
+    COMMA           reduce using rule 13 (expression -> expression DIVIDE expression .)
+    RRB             reduce using rule 13 (expression -> expression DIVIDE expression .)
+
+  ! MULTIPLY        [ shift and go to state 13 ]
+  ! DIVIDE          [ shift and go to state 14 ]
+  ! PLUS            [ shift and go to state 15 ]
+  ! MINUS           [ shift and go to state 16 ]
+
+
+state 23
+
+    (14) expression -> expression PLUS expression .
+    (12) expression -> expression . MULTIPLY expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 14 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 14 (expression -> expression PLUS expression .)
+    $end            reduce using rule 14 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 14 (expression -> expression PLUS expression .)
+    RRB             reduce using rule 14 (expression -> expression PLUS expression .)
+    MULTIPLY        shift and go to state 13
+    DIVIDE          shift and go to state 14
+
+  ! MULTIPLY        [ reduce using rule 14 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 14 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 15 ]
+  ! MINUS           [ shift and go to state 16 ]
+
+
+state 24
+
+    (15) expression -> expression MINUS expression .
+    (12) expression -> expression . MULTIPLY expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 15 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 15 (expression -> expression MINUS expression .)
+    $end            reduce using rule 15 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 15 (expression -> expression MINUS expression .)
+    RRB             reduce using rule 15 (expression -> expression MINUS expression .)
+    MULTIPLY        shift and go to state 13
+    DIVIDE          shift and go to state 14
+
+  ! MULTIPLY        [ reduce using rule 15 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 15 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 15 ]
+  ! MINUS           [ shift and go to state 16 ]
+
+
+state 25
+
+    (4) expression -> PRINT LRB optargs . RRB
+
+    RRB             shift and go to state 31
+
+
+state 26
+
+    (5) optargs -> args .
+
+    RRB             reduce using rule 5 (optargs -> args .)
+
+
+state 27
+
+    (7) args -> expression . COMMA args
+    (8) args -> expression .
+    (12) expression -> expression . MULTIPLY expression
+    (13) expression -> expression . DIVIDE expression
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
+
+    COMMA           shift and go to state 32
+    RRB             reduce using rule 8 (args -> expression .)
+    MULTIPLY        shift and go to state 13
+    DIVIDE          shift and go to state 14
+    PLUS            shift and go to state 15
+    MINUS           shift and go to state 16
+
+
+state 28
+
+    (9) var_declaration -> TYPEINT IDENTIFIER EQUALS . INT
+
+    INT             shift and go to state 33
+
+
+state 29
+
+    (10) var_declaration -> TYPEDOUBLE IDENTIFIER EQUALS . DOUBLE
+
+    DOUBLE          shift and go to state 34
+
+
+state 30
+
+    (11) var_declaration -> TYPESTRING IDENTIFIER EQUALS . STRING
+
+    STRING          shift and go to state 35
+
+
+state 31
+
+    (4) expression -> PRINT LRB optargs RRB .
+
+    MULTIPLY        reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+    DIVIDE          reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+    PLUS            reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+    MINUS           reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+    $end            reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+    COMMA           reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+    RRB             reduce using rule 4 (expression -> PRINT LRB optargs RRB .)
+
+
+state 32
+
+    (7) args -> expression COMMA . args
+    (7) args -> . expression COMMA args
+    (8) args -> . expression
+    (4) expression -> . PRINT LRB optargs RRB
+    (12) expression -> . expression MULTIPLY expression
+    (13) expression -> . expression DIVIDE expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . INT
+    (17) expression -> . DOUBLE
+    (18) expression -> . STRING
+    (19) expression -> . IDENTIFIER
+
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 7
+    STRING          shift and go to state 8
+    IDENTIFIER      shift and go to state 9
+
+    expression                     shift and go to state 27
+    args                           shift and go to state 36
+
+state 33
+
+    (9) var_declaration -> TYPEINT IDENTIFIER EQUALS INT .
+
+    $end            reduce using rule 9 (var_declaration -> TYPEINT IDENTIFIER EQUALS INT .)
+
+
+state 34
+
+    (10) var_declaration -> TYPEDOUBLE IDENTIFIER EQUALS DOUBLE .
+
+    $end            reduce using rule 10 (var_declaration -> TYPEDOUBLE IDENTIFIER EQUALS DOUBLE .)
+
+
+state 35
+
+    (11) var_declaration -> TYPESTRING IDENTIFIER EQUALS STRING .
+
+    $end            reduce using rule 11 (var_declaration -> TYPESTRING IDENTIFIER EQUALS STRING .)
+
+
+state 36
+
+    (7) args -> expression COMMA args .
+
+    RRB             reduce using rule 7 (args -> expression COMMA args .)
 
