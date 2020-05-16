@@ -1,7 +1,7 @@
 
 import ply.yacc as yacc
 from myParser import parser
-
+import sys
 
 variableValues = {}
 
@@ -84,19 +84,33 @@ def run(p):
                 for exp in expression:
                     # print("Expression: ",exp)
                     run(exp)
-
-
-
     else:
         return p
 
 
-while True:
-    try:
-        s = input('>> ')
-    except EOFError:
-        break
-    result = parser.parse(s)
-    print("result: ", result)
-    for tree in result[1]:
-        (run(tree))
+filename = sys.argv[1]
+f = open(filename,'r')
+lines = f.readlines()
+command = ""
+for line in lines:
+    line = line.strip('\n')
+    command += line + " "
+
+# print(command)
+
+
+
+result = parser.parse(command)
+for tree in result[1]:
+    run(tree)
+
+
+# while True:
+#     try:
+#         s = input('>> ')
+#     except EOFError:
+#         break
+#     result = parser.parse(s)
+#     print("result: ", result)
+#     for tree in result[1]:
+#         (run(tree))

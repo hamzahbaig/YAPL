@@ -37,7 +37,8 @@ tokens = (
     "OR",
     "NE",
     "DO",
-    "WHILE"
+    "WHILE",
+
 )
 
 t_EQUALEQUAL = r'=='
@@ -60,6 +61,26 @@ t_LCB = r'\{'
 t_RCB = r'\}'
 t_COMMA = r'\,'
 t_ignore = r' \n'
+
+
+def t_TYPEINT(t):
+    r'INT'
+    return t
+
+
+def t_TYPESTRING(t):
+    r'STRING'
+    return t
+
+
+def t_TYPEDOUBLE(t):
+    r'DOUBLE'
+    return t
+
+
+def t_TYPEBOOL(t):
+    r'BOOL'
+    return t
 
 
 def t_WHILE(t):
@@ -132,26 +153,6 @@ def t_True(t):
 
 def t_False(t):
     r'False'
-    return t
-
-
-def t_TYPEINT(t):
-    r'INT'
-    return t
-
-
-def t_TYPESTRING(t):
-    r'STRING'
-    return t
-
-
-def t_TYPEDOUBLE(t):
-    r'DOUBLE'
-    return t
-
-
-def t_TYPEBOOL(t):
-    r'BOOL'
     return t
 
 
