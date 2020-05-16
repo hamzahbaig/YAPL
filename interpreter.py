@@ -11,7 +11,11 @@ structDict = {}
 def run(p):
     if type(p) == tuple:
         if p[0] == '+':
-            return run(p[1]) + run(p[2])
+            try:
+                return run(p[1]) + run(p[2])
+            except:
+                print("TypeError")
+                sys.exit(1)
         elif p[0] == '-':
             return run(p[1]) - run(p[2])
         elif p[0] == '*':

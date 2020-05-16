@@ -62,7 +62,7 @@ t_RRB = r'\)'
 t_LCB = r'\{'
 t_RCB = r'\}'
 t_COMMA = r'\,'
-t_ignore = r' \n'
+t_ignore = ' \t\v\r\n'
 
 
 def t_STRUCT(t):
