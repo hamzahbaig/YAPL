@@ -10,6 +10,8 @@ tokens = (
     'DIVIDE',
     'LRB',  # (
     'RRB',  # )
+    'LCB',
+    'RCB',
     'PRINT',
     'SEMICOLON',  # ;
     'COMMA',  # ,
@@ -20,8 +22,8 @@ tokens = (
     'TYPEDOUBLE',
     'TYPESTRING',
     'TYPEBOOL',
-    'TRUE',
-    'FALSE',
+    'True',
+    'False',
     'POWER',
     'INCREMENT',
     'DECREMENT',
@@ -33,7 +35,9 @@ tokens = (
     "LT",
     "NOT",
     "OR",
-    "NE"
+    "NE",
+    "DO",
+    "WHILE"
 )
 
 t_EQUALEQUAL = r'=='
@@ -42,6 +46,7 @@ t_GT = r'>'
 t_LE = r'<='
 t_LT = r'<'
 t_NE = r'!='
+t_SEMICOLON = r';'
 
 t_PLUS = r'\+'
 t_MINUS = r'\-'
@@ -51,9 +56,15 @@ t_EQUALS = r'\='
 
 t_LRB = r'\('
 t_RRB = r'\)'
-t_SEMICOLON = r';'
+t_LCB = r'\{'
+t_RCB = r'\}'
 t_COMMA = r'\,'
-t_ignore = r' '
+t_ignore = r' \n'
+
+
+def t_WHILE(t):
+    r'WHILE'
+    return t
 
 
 def t_AND(t):
@@ -61,13 +72,20 @@ def t_AND(t):
     return t
 
 
+def t_DO(t):
+    r'DO'
+    return t
+
+
 def t_OR(t):
     r'OR'
     return t
 
+
 def t_NOT(t):
     r'NOT'
     return t
+
 
 def t_STRING(t):
     r'"[^"]*"'
@@ -107,13 +125,13 @@ def t_INT(t):
     return t
 
 
-def t_TRUE(t):
-    r'TRUE'
+def t_True(t):
+    r'True'
     return t
 
 
-def t_FALSE(t):
-    r'FALSE'
+def t_False(t):
+    r'False'
     return t
 
 

@@ -15,12 +15,10 @@ precedence = (
 
 def p_calc(p):
     '''
-    calc : expression
-        | var_declaration
+    calc : multiple
         | empty
     '''
-    print("TREE ->", p[1])
-    print(run(p[1]))
+    p[0] = ("Tree", p[1])
 
 
 def p_print_expresion(p):
@@ -79,6 +77,27 @@ def p_expression(p):
     p[0] = (p[2], p[1], p[3])
 
 
+def p_multiple_lines(p):
+    '''
+    multiple : expression SEMICOLON multiple
+             | var_declaration SEMICOLON multiple
+    '''
+    p[0] = [p[1]] + p[3]
+
+
+def p_multiple_empty(p):
+    'multiple : '
+    p[0] = []
+
+
+def p_expression_dowhile(p):
+    '''
+    expression : DO LCB multiple RCB WHILE LRB expression RRB
+    '''
+    p[0] = ('dowhile', p[7], p[3])
+
+
+
 def p_bracket_expression(p):
     '''
     expression : LRB expression MULTIPLY expression RRB
@@ -86,6 +105,7 @@ def p_bracket_expression(p):
                 | LRB expression PLUS expression RRB
                 | LRB expression MINUS expression RRB
                 | LRB expression POWER expression RRB
+                | LRB expression EQUALEQUAL expression RRB
                 | LRB expression NE expression RRB
                 | LRB expression LT expression RRB
                 | LRB expression LE expression RRB
@@ -124,8 +144,8 @@ def p_expression_int_double_string(p):
 
 def p_expression_bool(p):
     '''
-    expression : FALSE
-                | TRUE
+    expression : False
+                | True
     '''
     p[0] = ('bool', p[1])
 
@@ -151,6 +171,13 @@ def p_not_expression(p):
     p[0] = ("not", p[2])
 
 
+def p_not_expression_bracket(p):
+    '''
+    expression : LRB NOT expression RRB
+    '''
+    p[0] = ("not", p[3])
+
+
 def p_empty(p):
     '''
     empty :
@@ -161,63 +188,6 @@ def p_empty(p):
 
 def p_error(p):
     print("Syntax Error Found")
-
-
-variableValues = {}
-
-
-def run(p):
-    if type(p) == tuple:
-        if p[0] == '+':
-            return run(p[1]) + run(p[2])
-        elif p[0] == '-':
-            return run(p[1]) - run(p[2])
-        elif p[0] == '*':
-            return run(p[1]) * run(p[2])
-        elif p[0] == '/':
-            return run(p[1]) / run(p[2])
-        elif p[0] == "^":
-            return run(p[1]) ** run(p[2])
-        elif p[0] == "++":
-            ans = run(p[1])
-            if p[1][0] == "var":
-                ans += 1
-                variableValues[p[1][1]]["value"] = ans
-                return ans
-            elif p[1][0] == "const":
-                ans += 1
-                return ans
-        elif p[0] == "--":
-            ans = run(p[1])
-            if p[1][0] == "var":
-                ans -= 1
-                variableValues[p[1][1]]["value"] = ans
-                return ans
-            elif p[1][0] == "const":
-                ans -= 1
-                return ans
-        elif p[0] == '=':
-            if p[2] not in variableValues:
-                variableValues[p[2]] = {"type": p[1], "value": run(p[3])}
-            else:
-                return "Redeclaration Error"
-        elif p[0] == 'var':
-            if p[1] not in variableValues:
-                return "Undeclared Variable Found"
-            else:
-                return variableValues[p[1]]['value']
-        elif p[0] == "const":
-            return p[1]
-        elif p[0] == "bool":
-            return p[1]
-        elif p[1] == "print":
-            tobePrinted = ""
-            for arg in p[2]:
-                tobePrinted += str(run(arg)) + " "
-            print(tobePrinted)
-
-    else:
-        return p
 
 
 parser = yacc.yacc()
