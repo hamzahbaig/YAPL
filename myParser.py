@@ -58,6 +58,23 @@ def p_var_declaration(p):
     p[0] = (p[3], p[1], p[2], p[4])
 
 
+def p_var_assignment(p):
+    '''
+    var_assign : TYPEINT IDENTIFIER 
+                | TYPEDOUBLE IDENTIFIER 
+                | TYPESTRING IDENTIFIER 
+                | TYPEBOOL IDENTIFIER 
+    '''
+    p[0] = ("assign", p[1], p[2])
+
+
+def p_struct_assign(p):
+    '''
+    struct_var_assign : IDENTIFIER IDENTIFIER
+    '''
+    p[0] = ("structAssign", p[1], p[2])
+
+
 def p_expression(p):
     '''
     expression : expression MULTIPLY expression
@@ -81,6 +98,9 @@ def p_multiple_lines(p):
     '''
     multiple : expression SEMICOLON multiple
              | var_declaration SEMICOLON multiple
+             | struct_dec SEMICOLON multiple
+             | var_assign SEMICOLON multiple
+             | struct_var_assign SEMICOLON multiple
     '''
     p[0] = [p[1]] + p[3]
 
@@ -96,6 +116,19 @@ def p_expression_dowhile(p):
     '''
     p[0] = ('dowhile', p[7], p[3])
 
+
+def p_expression_struct(p):
+    '''
+    expression : STRUCT IDENTIFIER LCB multiple RCB 
+    '''
+    p[0] = ("struct", p[2], p[4])
+
+
+def p_struct_declaration(p):
+    ''' 
+    struct_dec : IDENTIFIER DOT IDENTIFIER EQUALS expression
+    '''
+    p[0] = ("structDec", p[1], p[3], p[5])
 
 
 def p_bracket_expression(p):
@@ -155,6 +188,13 @@ def p_expression_identifier(p):
     expression : IDENTIFIER
     '''
     p[0] = ('var', p[1])
+
+
+def p_expression_struct_identifier(p):
+    '''
+    expression : IDENTIFIER DOT IDENTIFIER
+    '''
+    p[0] = ("structVar", p[1], p[3])
 
 
 def p_expression_negate(p):

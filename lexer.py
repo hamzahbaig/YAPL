@@ -38,7 +38,8 @@ tokens = (
     "NE",
     "DO",
     "WHILE",
-
+    "STRUCT",
+    "DOT"
 )
 
 t_EQUALEQUAL = r'=='
@@ -49,6 +50,7 @@ t_LT = r'<'
 t_NE = r'!='
 t_SEMICOLON = r';'
 
+t_DOT = r'\.'
 t_PLUS = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLY = r'\*'
@@ -61,6 +63,11 @@ t_LCB = r'\{'
 t_RCB = r'\}'
 t_COMMA = r'\,'
 t_ignore = r' \n'
+
+
+def t_STRUCT(t):
+    r'STRUCT'
+    return t
 
 
 def t_TYPEINT(t):
