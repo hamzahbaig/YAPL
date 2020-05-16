@@ -58,6 +58,7 @@ def run(p):
             if p[2] not in variableValues:
                 variableValues[p[2]] = {"type": p[1], "value": run(p[3])}
             else:
+                variableValues[p[2]] = {"type": p[1], "value": run(p[3])} #FOR NOW
                 return "Redeclaration Error"
         elif p[0] == 'var':
             if p[1] not in variableValues:
@@ -76,6 +77,15 @@ def run(p):
             for arg in p[2]:
                 tobePrinted += str(run(arg)) + " "
             print(tobePrinted)
+        elif p[0] == "dowhile":
+            # print("COndiiton: ", p[1])
+            expression = p[2]
+            while run(p[1]):
+                for exp in expression:
+                    # print("Expression: ",exp)
+                    run(exp)
+
+
 
     else:
         return p
@@ -88,4 +98,5 @@ while True:
         break
     result = parser.parse(s)
     print("result: ", result)
-    print(run(result[1]))
+    for tree in result[1]:
+        (run(tree))
