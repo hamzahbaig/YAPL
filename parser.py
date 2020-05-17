@@ -222,4 +222,4 @@ def p_error(p):
     print("Syntax Error Found")
 
 
-parser = yacc.yacc()
+yaplParser = yacc.yacc()

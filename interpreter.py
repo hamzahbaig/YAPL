@@ -1,6 +1,6 @@
 
 import ply.yacc as yacc
-from myParser import parser
+from parser import yaplParser
 import sys
 import copy
 
@@ -159,7 +159,7 @@ command = ""
 for line in lines:
     command += line + " "
 
-result = parser.parse(command)
+result = yaplParser.parse(command)
 print("Welcome to the MyYAPL Interpreter!")
 print("Output:")
 for tree in result[1]:
