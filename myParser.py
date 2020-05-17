@@ -54,6 +54,7 @@ def p_var_declaration(p):
                     | TYPEDOUBLE IDENTIFIER EQUALS expression
                     | TYPESTRING IDENTIFIER EQUALS expression
                     | TYPEBOOL IDENTIFIER EQUALS expression
+                    | TYPECHAR IDENTIFIER EQUALS expression
     '''
     p[0] = (p[3], p[1], p[2], p[4])
 
@@ -64,6 +65,7 @@ def p_var_assignment(p):
                 | TYPEDOUBLE IDENTIFIER 
                 | TYPESTRING IDENTIFIER 
                 | TYPEBOOL IDENTIFIER 
+                | TYPECHAR IDENTIFIER
     '''
     p[0] = ("assign", p[1], p[2])
 
@@ -160,6 +162,7 @@ def p_expression_int_double_string(p):
     expression : INT
               | DOUBLE
               | STRING
+              | CHAR
     '''
     p[0] = ('const', p[1])
 

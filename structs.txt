@@ -2,7 +2,7 @@ STRUCT BookStruct {
  STRING title;
  STRING author;
  STRING subject;
- STRING book_id;
+ INT book_id;
 };
 BookStruct Book1;
 BookStruct Book2;

@@ -160,5 +160,7 @@ for line in lines:
     command += line + " "
 
 result = parser.parse(command)
+print("Welcome to the MyYAPL Interpreter!")
+print("Output:")
 for tree in result[1]:
     run(tree)

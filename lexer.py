@@ -22,6 +22,7 @@ tokens = (
     'TYPEDOUBLE',
     'TYPESTRING',
     'TYPEBOOL',
+    'TYPECHAR',
     'True',
     'False',
     'POWER',
@@ -40,7 +41,8 @@ tokens = (
     "WHILE",
     "STRUCT",
     "DOT",
-    "MOD"
+    "MOD",
+    "CHAR"
 )
 
 t_EQUALEQUAL = r'=='
@@ -66,6 +68,8 @@ t_COMMA = r'\,'
 t_ignore = ' \t\v\r\n'
 
 
+
+
 def t_STRUCT(t):
     r'STRUCT'
     return t
@@ -78,6 +82,11 @@ def t_TYPEINT(t):
 
 def t_TYPESTRING(t):
     r'STRING'
+    return t
+
+
+def t_TYPECHAR(t):
+    r'CHAR'
     return t
 
 
@@ -118,6 +127,11 @@ def t_NOT(t):
 
 def t_STRING(t):
     r'"[^"]*"'
+    t.value = t.value[1:-1]
+    return t
+
+def t_CHAR(t):
+    r'"[A-Za-z]"'
     t.value = t.value[1:-1]
     return t
 
@@ -170,6 +184,7 @@ def t_IDENTIFIER(t):
 
 
 def t_error(t):
+    print(t.value)
     print("Illegal characters!")
     t.lexer.skip(1)
 
