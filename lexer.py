@@ -39,7 +39,8 @@ tokens = (
     "DO",
     "WHILE",
     "STRUCT",
-    "DOT"
+    "DOT",
+    "MOD"
 )
 
 t_EQUALEQUAL = r'=='
@@ -49,7 +50,7 @@ t_LE = r'<='
 t_LT = r'<'
 t_NE = r'!='
 t_SEMICOLON = r';'
-
+t_MOD = r'\%'
 t_DOT = r'\.'
 t_PLUS = r'\+'
 t_MINUS = r'\-'

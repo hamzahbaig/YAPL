@@ -6,9 +6,11 @@ import copy
 
 variableValues = {}
 structDict = {}
+dowhile = False
 
 
 def run(p):
+    global dowhile
     if type(p) == tuple:
         if p[0] == '+':
             try:
@@ -17,13 +19,39 @@ def run(p):
                 print("TypeError")
                 sys.exit(1)
         elif p[0] == '-':
-            return run(p[1]) - run(p[2])
+            try:
+                return run(p[1]) - run(p[2])
+            except:
+                print("TypeError")
+                sys.exit(1)
         elif p[0] == '*':
-            return run(p[1]) * run(p[2])
+            try:
+                return run(p[1]) * run(p[2])
+            except:
+                print("TypeError")
+                sys.exit(1)
         elif p[0] == '/':
-            return run(p[1]) / run(p[2])
+            divisor = run(p[2])
+            if divisor == 0:
+                print("Division by Zero")
+                sys.exit()
+            try:
+                return run(p[1]) / divisor
+            except:
+                print("TypeError")
+                sys.exit(1)
         elif p[0] == "^":
-            return run(p[1]) ** run(p[2])
+            try:
+                return run(p[1]) ** run(p[2])
+            except:
+                print("TypeError")
+                sys.exit(1)
+        elif p[0] == "%":
+            try:
+                return run(p[1]) % run(p[2])
+            except:
+                print("TypeError")
+                sys.exit(1)
         elif p[0] == "==":
             return run(p[1]) == run(p[2])
         elif p[0] == "!=":
@@ -63,10 +91,12 @@ def run(p):
         elif p[0] == '=':
             if p[2] not in variableValues:
                 variableValues[p[2]] = {"type": p[1], "value": run(p[3])}
-            else:
+            elif (dowhile == True):
                 variableValues[p[2]] = {"type": p[1],
-                                        "value": run(p[3])}  # FOR NOW
-                return "Redeclaration Error"
+                                        "value": run(p[3])}
+            else:
+                print("Redeclaration Error")
+                sys.exit(1)
         elif p[0] == 'var':
             if p[1] not in variableValues:
                 return "Undeclared Variable Found"
@@ -89,11 +119,20 @@ def run(p):
                 tobePrinted += str(run(arg)) + " "
             print(tobePrinted)
         elif p[0] == "dowhile":
+            dowhile = True
             expression = p[2]
             while run(p[1]):
                 for exp in expression:
                     run(exp)
         elif p[0] == "assign":
+            if p[2] not in variableValues:
+                variableValues[p[2]] = {"type": p[1], "value": None}
+            elif (dowhile == True):
+                variableValues[p[2]] = {"type": p[1],
+                                        "value": None}
+            else:
+                print("Redeclaration Error")
+                sys.exit(1)
             return (p[1], p[2])
         elif p[0] == "structAssign":
             if p[1] in structDict:
@@ -118,23 +157,8 @@ f = open(filename, 'r')
 lines = f.readlines()
 command = ""
 for line in lines:
-    line = line.strip('\n')
     command += line + " "
-
-# print(command)
-
 
 result = parser.parse(command)
 for tree in result[1]:
     run(tree)
-
-
-# while True:
-#     try:
-#         s = input('>> ')
-#     except EOFError:
-#         break
-#     result = parser.parse(s)
-#     print("result: ", result)
-#     for tree in result[1]:
-#         (run(tree))

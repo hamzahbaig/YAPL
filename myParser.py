@@ -90,6 +90,7 @@ def p_expression(p):
                 | expression GE expression
                 | expression AND expression
                 | expression OR expression
+                | expression MOD expression
     '''
     p[0] = (p[2], p[1], p[3])
 
@@ -133,21 +134,9 @@ def p_struct_declaration(p):
 
 def p_bracket_expression(p):
     '''
-    expression : LRB expression MULTIPLY expression RRB
-                | LRB expression DIVIDE expression RRB
-                | LRB expression PLUS expression RRB
-                | LRB expression MINUS expression RRB
-                | LRB expression POWER expression RRB
-                | LRB expression EQUALEQUAL expression RRB
-                | LRB expression NE expression RRB
-                | LRB expression LT expression RRB
-                | LRB expression LE expression RRB
-                | LRB expression GT expression RRB
-                | LRB expression GE expression RRB
-                | LRB expression AND expression RRB
-                | LRB expression OR expression RRB
+    expression : LRB expression RRB
     '''
-    p[0] = (p[3], p[2], p[4])
+    p[0] = (p[2])
 
 
 def p_increment_decrement(p):
