@@ -196,6 +196,11 @@ def p_expression_negate(p):
     p[0] = ("*", -1, p[2])
 
 
+def p_expression_reassign(p):
+    'expression : IDENTIFIER EQUALS expression'
+    p[0] = ('reassign', p[1], p[3])
+
+
 def p_not_expression(p):
     '''
     expression : NOT expression

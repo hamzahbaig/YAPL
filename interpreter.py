@@ -147,6 +147,14 @@ def run(p):
             varName = p[2]
             value = run(p[3])
             structDict[structName][varName]["value"] = value
+        elif p[0] == "reassign":
+            var = p[1]
+            value = run(p[2])
+            if var not in variableValues:
+                print("Variable Not declared yet!!")
+                sys.exit(1)
+            else:
+                variableValues[var]["value"] = value
 
     else:
         return p

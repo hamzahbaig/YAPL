@@ -58,9 +58,10 @@ Rule 52    expression -> True
 Rule 53    expression -> IDENTIFIER
 Rule 54    expression -> IDENTIFIER DOT IDENTIFIER
 Rule 55    expression -> MINUS expression
-Rule 56    expression -> NOT expression
-Rule 57    expression -> LRB NOT expression RRB
-Rule 58    empty -> <empty>
+Rule 56    expression -> IDENTIFIER EQUALS expression
+Rule 57    expression -> NOT expression
+Rule 58    expression -> LRB NOT expression RRB
+Rule 59    empty -> <empty>
 
 Terminals, with rules where they appear
 
@@ -73,28 +74,28 @@ DO                   : 39
 DOT                  : 41 54
 DOUBLE               : 48
 EQUALEQUAL           : 24
-EQUALS               : 8 9 10 11 12 41
+EQUALS               : 8 9 10 11 12 41 56
 False                : 51
 GE                   : 29
 GT                   : 28
-IDENTIFIER           : 8 9 10 11 12 13 14 15 16 17 18 18 40 41 41 53 54 54
+IDENTIFIER           : 8 9 10 11 12 13 14 15 16 17 18 18 40 41 41 53 54 54 56
 INCREMENT            : 43 45
 INT                  : 47
 LCB                  : 39 40
 LE                   : 27
-LRB                  : 3 39 42 45 46 57
+LRB                  : 3 39 42 45 46 58
 LT                   : 26
 MINUS                : 22 55
 MOD                  : 32
 MULTIPLY             : 19
 NE                   : 25
-NOT                  : 56 57
+NOT                  : 57 58
 OR                   : 31
 PLUS                 : 21
 POWER                : 23
 PRINT                : 3
 RCB                  : 39 40
-RRB                  : 3 39 42 45 46 57
+RRB                  : 3 39 42 45 46 58
 SEMICOLON            : 33 34 35 36 37
 STRING               : 49
 STRUCT               : 40
@@ -112,7 +113,7 @@ Nonterminals, with rules where they appear
 args                 : 4 6
 calc                 : 0
 empty                : 2
-expression           : 6 7 8 9 10 11 12 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 39 41 42 43 44 45 46 55 56 57
+expression           : 6 7 8 9 10 11 12 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 39 41 42 43 44 45 46 55 56 57 58
 multiple             : 1 33 34 35 36 37 39 40
 optargs              : 3
 struct_dec           : 35
@@ -133,7 +134,7 @@ state 0
     (36) multiple -> . var_assign SEMICOLON multiple
     (37) multiple -> . struct_var_assign SEMICOLON multiple
     (38) multiple -> .
-    (58) empty -> .
+    (59) empty -> .
     (3) expression -> . PRINT LRB optargs RRB
     (19) expression -> . expression MULTIPLY expression
     (20) expression -> . expression DIVIDE expression
@@ -165,8 +166,9 @@ state 0
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -201,7 +203,7 @@ state 0
     TYPEBOOL        shift and go to state 25
     TYPECHAR        shift and go to state 26
 
-  ! $end            [ reduce using rule 58 (empty -> .) ]
+  ! $end            [ reduce using rule 59 (empty -> .) ]
 
     calc                           shift and go to state 1
     multiple                       shift and go to state 2
@@ -311,7 +313,7 @@ state 10
     (42) expression -> LRB . expression RRB
     (45) expression -> LRB . expression INCREMENT RRB
     (46) expression -> LRB . expression DECREMENT RRB
-    (57) expression -> LRB . NOT expression RRB
+    (58) expression -> LRB . NOT expression RRB
     (3) expression -> . PRINT LRB optargs RRB
     (19) expression -> . expression MULTIPLY expression
     (20) expression -> . expression DIVIDE expression
@@ -343,8 +345,9 @@ state 10
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     NOT             shift and go to state 50
     PRINT           shift and go to state 9
@@ -396,8 +399,9 @@ state 11
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -433,6 +437,7 @@ state 14
 
     (53) expression -> IDENTIFIER .
     (54) expression -> IDENTIFIER . DOT IDENTIFIER
+    (56) expression -> IDENTIFIER . EQUALS expression
     (41) struct_dec -> IDENTIFIER . DOT IDENTIFIER EQUALS expression
     (18) struct_var_assign -> IDENTIFIER . IDENTIFIER
 
@@ -454,6 +459,7 @@ state 14
     INCREMENT       reduce using rule 53 (expression -> IDENTIFIER .)
     DECREMENT       reduce using rule 53 (expression -> IDENTIFIER .)
     DOT             shift and go to state 56
+    EQUALS          shift and go to state 57
     IDENTIFIER      shift and go to state 55
 
 
@@ -609,7 +615,7 @@ state 20
 
 state 21
 
-    (56) expression -> NOT . expression
+    (57) expression -> NOT . expression
     (3) expression -> . PRINT LRB optargs RRB
     (19) expression -> . expression MULTIPLY expression
     (20) expression -> . expression DIVIDE expression
@@ -641,8 +647,9 @@ state 21
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -658,14 +665,14 @@ state 21
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 57
+    expression                     shift and go to state 58
 
 state 22
 
     (8) var_declaration -> TYPEINT . IDENTIFIER EQUALS expression
     (13) var_assign -> TYPEINT . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 58
+    IDENTIFIER      shift and go to state 59
 
 
 state 23
@@ -673,7 +680,7 @@ state 23
     (9) var_declaration -> TYPEDOUBLE . IDENTIFIER EQUALS expression
     (14) var_assign -> TYPEDOUBLE . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 59
+    IDENTIFIER      shift and go to state 60
 
 
 state 24
@@ -681,7 +688,7 @@ state 24
     (10) var_declaration -> TYPESTRING . IDENTIFIER EQUALS expression
     (15) var_assign -> TYPESTRING . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 60
+    IDENTIFIER      shift and go to state 61
 
 
 state 25
@@ -689,7 +696,7 @@ state 25
     (11) var_declaration -> TYPEBOOL . IDENTIFIER EQUALS expression
     (16) var_assign -> TYPEBOOL . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 61
+    IDENTIFIER      shift and go to state 62
 
 
 state 26
@@ -697,7 +704,7 @@ state 26
     (12) var_declaration -> TYPECHAR . IDENTIFIER EQUALS expression
     (17) var_assign -> TYPECHAR . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 62
+    IDENTIFIER      shift and go to state 63
 
 
 state 27
@@ -740,8 +747,9 @@ state 27
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -777,7 +785,7 @@ state 27
     TYPECHAR        shift and go to state 26
 
     expression                     shift and go to state 4
-    multiple                       shift and go to state 63
+    multiple                       shift and go to state 64
     var_declaration                shift and go to state 5
     struct_dec                     shift and go to state 6
     var_assign                     shift and go to state 7
@@ -817,8 +825,9 @@ state 28
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -834,7 +843,7 @@ state 28
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 64
+    expression                     shift and go to state 65
 
 state 29
 
@@ -870,8 +879,9 @@ state 29
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -887,7 +897,7 @@ state 29
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 65
+    expression                     shift and go to state 66
 
 state 30
 
@@ -923,8 +933,9 @@ state 30
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -940,7 +951,7 @@ state 30
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 66
+    expression                     shift and go to state 67
 
 state 31
 
@@ -976,8 +987,9 @@ state 31
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -993,7 +1005,7 @@ state 31
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 67
+    expression                     shift and go to state 68
 
 state 32
 
@@ -1029,8 +1041,9 @@ state 32
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1046,7 +1059,7 @@ state 32
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 68
+    expression                     shift and go to state 69
 
 state 33
 
@@ -1082,8 +1095,9 @@ state 33
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1099,7 +1113,7 @@ state 33
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 69
+    expression                     shift and go to state 70
 
 state 34
 
@@ -1135,8 +1149,9 @@ state 34
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1152,7 +1167,7 @@ state 34
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 70
+    expression                     shift and go to state 71
 
 state 35
 
@@ -1188,8 +1203,9 @@ state 35
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1205,7 +1221,7 @@ state 35
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 71
+    expression                     shift and go to state 72
 
 state 36
 
@@ -1241,8 +1257,9 @@ state 36
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1258,7 +1275,7 @@ state 36
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 72
+    expression                     shift and go to state 73
 
 state 37
 
@@ -1294,8 +1311,9 @@ state 37
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1311,7 +1329,7 @@ state 37
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 73
+    expression                     shift and go to state 74
 
 state 38
 
@@ -1347,8 +1365,9 @@ state 38
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1364,7 +1383,7 @@ state 38
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 74
+    expression                     shift and go to state 75
 
 state 39
 
@@ -1400,8 +1419,9 @@ state 39
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1417,7 +1437,7 @@ state 39
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 75
+    expression                     shift and go to state 76
 
 state 40
 
@@ -1453,8 +1473,9 @@ state 40
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1470,7 +1491,7 @@ state 40
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 76
+    expression                     shift and go to state 77
 
 state 41
 
@@ -1506,8 +1527,9 @@ state 41
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -1523,7 +1545,7 @@ state 41
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 77
+    expression                     shift and go to state 78
 
 state 42
 
@@ -1615,8 +1637,9 @@ state 44
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -1652,7 +1675,7 @@ state 44
     TYPECHAR        shift and go to state 26
 
     var_declaration                shift and go to state 5
-    multiple                       shift and go to state 78
+    multiple                       shift and go to state 79
     expression                     shift and go to state 4
     struct_dec                     shift and go to state 6
     var_assign                     shift and go to state 7
@@ -1698,8 +1721,9 @@ state 45
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -1735,7 +1759,7 @@ state 45
     TYPECHAR        shift and go to state 26
 
     struct_dec                     shift and go to state 6
-    multiple                       shift and go to state 79
+    multiple                       shift and go to state 80
     expression                     shift and go to state 4
     var_declaration                shift and go to state 5
     var_assign                     shift and go to state 7
@@ -1781,8 +1805,9 @@ state 46
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -1818,7 +1843,7 @@ state 46
     TYPECHAR        shift and go to state 26
 
     var_assign                     shift and go to state 7
-    multiple                       shift and go to state 80
+    multiple                       shift and go to state 81
     expression                     shift and go to state 4
     var_declaration                shift and go to state 5
     struct_dec                     shift and go to state 6
@@ -1864,8 +1889,9 @@ state 47
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -1901,7 +1927,7 @@ state 47
     TYPECHAR        shift and go to state 26
 
     struct_var_assign              shift and go to state 8
-    multiple                       shift and go to state 81
+    multiple                       shift and go to state 82
     expression                     shift and go to state 4
     var_declaration                shift and go to state 5
     struct_dec                     shift and go to state 6
@@ -1945,8 +1971,9 @@ state 48
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     RRB             reduce using rule 5 (optargs -> .)
     PRINT           shift and go to state 9
@@ -1963,9 +1990,9 @@ state 48
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    optargs                        shift and go to state 82
-    args                           shift and go to state 83
-    expression                     shift and go to state 84
+    optargs                        shift and go to state 83
+    args                           shift and go to state 84
+    expression                     shift and go to state 85
 
 state 49
 
@@ -1989,9 +2016,9 @@ state 49
     (43) expression -> expression . INCREMENT
     (44) expression -> expression . DECREMENT
 
-    RRB             shift and go to state 85
-    INCREMENT       shift and go to state 86
-    DECREMENT       shift and go to state 87
+    RRB             shift and go to state 86
+    INCREMENT       shift and go to state 87
+    DECREMENT       shift and go to state 88
     MULTIPLY        shift and go to state 28
     DIVIDE          shift and go to state 29
     PLUS            shift and go to state 30
@@ -2010,8 +2037,8 @@ state 49
 
 state 50
 
-    (57) expression -> LRB NOT . expression RRB
-    (56) expression -> NOT . expression
+    (58) expression -> LRB NOT . expression RRB
+    (57) expression -> NOT . expression
     (3) expression -> . PRINT LRB optargs RRB
     (19) expression -> . expression MULTIPLY expression
     (20) expression -> . expression DIVIDE expression
@@ -2043,8 +2070,9 @@ state 50
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -2060,12 +2088,13 @@ state 50
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 88
+    expression                     shift and go to state 89
 
 state 51
 
     (53) expression -> IDENTIFIER .
     (54) expression -> IDENTIFIER . DOT IDENTIFIER
+    (56) expression -> IDENTIFIER . EQUALS expression
 
     RRB             reduce using rule 53 (expression -> IDENTIFIER .)
     INCREMENT       reduce using rule 53 (expression -> IDENTIFIER .)
@@ -2086,7 +2115,8 @@ state 51
     MOD             reduce using rule 53 (expression -> IDENTIFIER .)
     SEMICOLON       reduce using rule 53 (expression -> IDENTIFIER .)
     COMMA           reduce using rule 53 (expression -> IDENTIFIER .)
-    DOT             shift and go to state 89
+    DOT             shift and go to state 90
+    EQUALS          shift and go to state 57
 
 
 state 52
@@ -2187,8 +2217,9 @@ state 53
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -2222,7 +2253,7 @@ state 53
     TYPEBOOL        shift and go to state 25
     TYPECHAR        shift and go to state 26
 
-    multiple                       shift and go to state 90
+    multiple                       shift and go to state 91
     expression                     shift and go to state 4
     var_declaration                shift and go to state 5
     struct_dec                     shift and go to state 6
@@ -2233,7 +2264,7 @@ state 54
 
     (40) expression -> STRUCT IDENTIFIER . LCB multiple RCB
 
-    LCB             shift and go to state 91
+    LCB             shift and go to state 92
 
 
 state 55
@@ -2248,12 +2279,66 @@ state 56
     (54) expression -> IDENTIFIER DOT . IDENTIFIER
     (41) struct_dec -> IDENTIFIER DOT . IDENTIFIER EQUALS expression
 
-    IDENTIFIER      shift and go to state 92
+    IDENTIFIER      shift and go to state 93
 
 
 state 57
 
-    (56) expression -> NOT expression .
+    (56) expression -> IDENTIFIER EQUALS . expression
+    (3) expression -> . PRINT LRB optargs RRB
+    (19) expression -> . expression MULTIPLY expression
+    (20) expression -> . expression DIVIDE expression
+    (21) expression -> . expression PLUS expression
+    (22) expression -> . expression MINUS expression
+    (23) expression -> . expression POWER expression
+    (24) expression -> . expression EQUALEQUAL expression
+    (25) expression -> . expression NE expression
+    (26) expression -> . expression LT expression
+    (27) expression -> . expression LE expression
+    (28) expression -> . expression GT expression
+    (29) expression -> . expression GE expression
+    (30) expression -> . expression AND expression
+    (31) expression -> . expression OR expression
+    (32) expression -> . expression MOD expression
+    (39) expression -> . DO LCB multiple RCB WHILE LRB expression RRB
+    (40) expression -> . STRUCT IDENTIFIER LCB multiple RCB
+    (42) expression -> . LRB expression RRB
+    (43) expression -> . expression INCREMENT
+    (44) expression -> . expression DECREMENT
+    (45) expression -> . LRB expression INCREMENT RRB
+    (46) expression -> . LRB expression DECREMENT RRB
+    (47) expression -> . INT
+    (48) expression -> . DOUBLE
+    (49) expression -> . STRING
+    (50) expression -> . CHAR
+    (51) expression -> . False
+    (52) expression -> . True
+    (53) expression -> . IDENTIFIER
+    (54) expression -> . IDENTIFIER DOT IDENTIFIER
+    (55) expression -> . MINUS expression
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
+
+    PRINT           shift and go to state 9
+    DO              shift and go to state 12
+    STRUCT          shift and go to state 13
+    LRB             shift and go to state 10
+    INT             shift and go to state 15
+    DOUBLE          shift and go to state 16
+    STRING          shift and go to state 17
+    CHAR            shift and go to state 18
+    False           shift and go to state 19
+    True            shift and go to state 20
+    IDENTIFIER      shift and go to state 51
+    MINUS           shift and go to state 11
+    NOT             shift and go to state 21
+
+    expression                     shift and go to state 94
+
+state 58
+
+    (57) expression -> NOT expression .
     (19) expression -> expression . MULTIPLY expression
     (20) expression -> expression . DIVIDE expression
     (21) expression -> expression . PLUS expression
@@ -2271,25 +2356,25 @@ state 57
     (43) expression -> expression . INCREMENT
     (44) expression -> expression . DECREMENT
 
-    SEMICOLON       reduce using rule 56 (expression -> NOT expression .)
-    MULTIPLY        reduce using rule 56 (expression -> NOT expression .)
-    DIVIDE          reduce using rule 56 (expression -> NOT expression .)
-    PLUS            reduce using rule 56 (expression -> NOT expression .)
-    MINUS           reduce using rule 56 (expression -> NOT expression .)
-    POWER           reduce using rule 56 (expression -> NOT expression .)
-    EQUALEQUAL      reduce using rule 56 (expression -> NOT expression .)
-    NE              reduce using rule 56 (expression -> NOT expression .)
-    LT              reduce using rule 56 (expression -> NOT expression .)
-    LE              reduce using rule 56 (expression -> NOT expression .)
-    GT              reduce using rule 56 (expression -> NOT expression .)
-    GE              reduce using rule 56 (expression -> NOT expression .)
-    AND             reduce using rule 56 (expression -> NOT expression .)
-    OR              reduce using rule 56 (expression -> NOT expression .)
-    MOD             reduce using rule 56 (expression -> NOT expression .)
-    INCREMENT       reduce using rule 56 (expression -> NOT expression .)
-    DECREMENT       reduce using rule 56 (expression -> NOT expression .)
-    RRB             reduce using rule 56 (expression -> NOT expression .)
-    COMMA           reduce using rule 56 (expression -> NOT expression .)
+    SEMICOLON       reduce using rule 57 (expression -> NOT expression .)
+    MULTIPLY        reduce using rule 57 (expression -> NOT expression .)
+    DIVIDE          reduce using rule 57 (expression -> NOT expression .)
+    PLUS            reduce using rule 57 (expression -> NOT expression .)
+    MINUS           reduce using rule 57 (expression -> NOT expression .)
+    POWER           reduce using rule 57 (expression -> NOT expression .)
+    EQUALEQUAL      reduce using rule 57 (expression -> NOT expression .)
+    NE              reduce using rule 57 (expression -> NOT expression .)
+    LT              reduce using rule 57 (expression -> NOT expression .)
+    LE              reduce using rule 57 (expression -> NOT expression .)
+    GT              reduce using rule 57 (expression -> NOT expression .)
+    GE              reduce using rule 57 (expression -> NOT expression .)
+    AND             reduce using rule 57 (expression -> NOT expression .)
+    OR              reduce using rule 57 (expression -> NOT expression .)
+    MOD             reduce using rule 57 (expression -> NOT expression .)
+    INCREMENT       reduce using rule 57 (expression -> NOT expression .)
+    DECREMENT       reduce using rule 57 (expression -> NOT expression .)
+    RRB             reduce using rule 57 (expression -> NOT expression .)
+    COMMA           reduce using rule 57 (expression -> NOT expression .)
 
   ! MULTIPLY        [ shift and go to state 28 ]
   ! DIVIDE          [ shift and go to state 29 ]
@@ -2309,52 +2394,52 @@ state 57
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 58
+state 59
 
     (8) var_declaration -> TYPEINT IDENTIFIER . EQUALS expression
     (13) var_assign -> TYPEINT IDENTIFIER .
 
-    EQUALS          shift and go to state 93
+    EQUALS          shift and go to state 95
     SEMICOLON       reduce using rule 13 (var_assign -> TYPEINT IDENTIFIER .)
-
-
-state 59
-
-    (9) var_declaration -> TYPEDOUBLE IDENTIFIER . EQUALS expression
-    (14) var_assign -> TYPEDOUBLE IDENTIFIER .
-
-    EQUALS          shift and go to state 94
-    SEMICOLON       reduce using rule 14 (var_assign -> TYPEDOUBLE IDENTIFIER .)
 
 
 state 60
 
-    (10) var_declaration -> TYPESTRING IDENTIFIER . EQUALS expression
-    (15) var_assign -> TYPESTRING IDENTIFIER .
+    (9) var_declaration -> TYPEDOUBLE IDENTIFIER . EQUALS expression
+    (14) var_assign -> TYPEDOUBLE IDENTIFIER .
 
-    EQUALS          shift and go to state 95
-    SEMICOLON       reduce using rule 15 (var_assign -> TYPESTRING IDENTIFIER .)
+    EQUALS          shift and go to state 96
+    SEMICOLON       reduce using rule 14 (var_assign -> TYPEDOUBLE IDENTIFIER .)
 
 
 state 61
 
-    (11) var_declaration -> TYPEBOOL IDENTIFIER . EQUALS expression
-    (16) var_assign -> TYPEBOOL IDENTIFIER .
+    (10) var_declaration -> TYPESTRING IDENTIFIER . EQUALS expression
+    (15) var_assign -> TYPESTRING IDENTIFIER .
 
-    EQUALS          shift and go to state 96
-    SEMICOLON       reduce using rule 16 (var_assign -> TYPEBOOL IDENTIFIER .)
+    EQUALS          shift and go to state 97
+    SEMICOLON       reduce using rule 15 (var_assign -> TYPESTRING IDENTIFIER .)
 
 
 state 62
 
-    (12) var_declaration -> TYPECHAR IDENTIFIER . EQUALS expression
-    (17) var_assign -> TYPECHAR IDENTIFIER .
+    (11) var_declaration -> TYPEBOOL IDENTIFIER . EQUALS expression
+    (16) var_assign -> TYPEBOOL IDENTIFIER .
 
-    EQUALS          shift and go to state 97
-    SEMICOLON       reduce using rule 17 (var_assign -> TYPECHAR IDENTIFIER .)
+    EQUALS          shift and go to state 98
+    SEMICOLON       reduce using rule 16 (var_assign -> TYPEBOOL IDENTIFIER .)
 
 
 state 63
+
+    (12) var_declaration -> TYPECHAR IDENTIFIER . EQUALS expression
+    (17) var_assign -> TYPECHAR IDENTIFIER .
+
+    EQUALS          shift and go to state 99
+    SEMICOLON       reduce using rule 17 (var_assign -> TYPECHAR IDENTIFIER .)
+
+
+state 64
 
     (33) multiple -> expression SEMICOLON multiple .
 
@@ -2362,7 +2447,7 @@ state 63
     RCB             reduce using rule 33 (multiple -> expression SEMICOLON multiple .)
 
 
-state 64
+state 65
 
     (19) expression -> expression MULTIPLY expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2420,7 +2505,7 @@ state 64
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 65
+state 66
 
     (20) expression -> expression DIVIDE expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2478,7 +2563,7 @@ state 65
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 66
+state 67
 
     (21) expression -> expression PLUS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2536,7 +2621,7 @@ state 66
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 67
+state 68
 
     (22) expression -> expression MINUS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2594,7 +2679,7 @@ state 67
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 68
+state 69
 
     (23) expression -> expression POWER expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2652,7 +2737,7 @@ state 68
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 69
+state 70
 
     (24) expression -> expression EQUALEQUAL expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2710,7 +2795,7 @@ state 69
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 70
+state 71
 
     (25) expression -> expression NE expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2768,7 +2853,7 @@ state 70
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 71
+state 72
 
     (26) expression -> expression LT expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2826,7 +2911,7 @@ state 71
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 72
+state 73
 
     (27) expression -> expression LE expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2884,7 +2969,7 @@ state 72
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 73
+state 74
 
     (28) expression -> expression GT expression .
     (19) expression -> expression . MULTIPLY expression
@@ -2942,7 +3027,7 @@ state 73
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 74
+state 75
 
     (29) expression -> expression GE expression .
     (19) expression -> expression . MULTIPLY expression
@@ -3000,7 +3085,7 @@ state 74
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 75
+state 76
 
     (30) expression -> expression AND expression .
     (19) expression -> expression . MULTIPLY expression
@@ -3058,7 +3143,7 @@ state 75
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 76
+state 77
 
     (31) expression -> expression OR expression .
     (19) expression -> expression . MULTIPLY expression
@@ -3116,7 +3201,7 @@ state 76
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 77
+state 78
 
     (32) expression -> expression MOD expression .
     (19) expression -> expression . MULTIPLY expression
@@ -3190,7 +3275,7 @@ state 77
   ! DECREMENT       [ reduce using rule 32 (expression -> expression MOD expression .) ]
 
 
-state 78
+state 79
 
     (34) multiple -> var_declaration SEMICOLON multiple .
 
@@ -3198,7 +3283,7 @@ state 78
     RCB             reduce using rule 34 (multiple -> var_declaration SEMICOLON multiple .)
 
 
-state 79
+state 80
 
     (35) multiple -> struct_dec SEMICOLON multiple .
 
@@ -3206,7 +3291,7 @@ state 79
     RCB             reduce using rule 35 (multiple -> struct_dec SEMICOLON multiple .)
 
 
-state 80
+state 81
 
     (36) multiple -> var_assign SEMICOLON multiple .
 
@@ -3214,7 +3299,7 @@ state 80
     RCB             reduce using rule 36 (multiple -> var_assign SEMICOLON multiple .)
 
 
-state 81
+state 82
 
     (37) multiple -> struct_var_assign SEMICOLON multiple .
 
@@ -3222,21 +3307,21 @@ state 81
     RCB             reduce using rule 37 (multiple -> struct_var_assign SEMICOLON multiple .)
 
 
-state 82
+state 83
 
     (3) expression -> PRINT LRB optargs . RRB
 
-    RRB             shift and go to state 98
+    RRB             shift and go to state 100
 
 
-state 83
+state 84
 
     (4) optargs -> args .
 
     RRB             reduce using rule 4 (optargs -> args .)
 
 
-state 84
+state 85
 
     (6) args -> expression . COMMA args
     (7) args -> expression .
@@ -3257,7 +3342,7 @@ state 84
     (43) expression -> expression . INCREMENT
     (44) expression -> expression . DECREMENT
 
-    COMMA           shift and go to state 99
+    COMMA           shift and go to state 101
     RRB             reduce using rule 7 (args -> expression .)
     MULTIPLY        shift and go to state 28
     DIVIDE          shift and go to state 29
@@ -3277,7 +3362,7 @@ state 84
     DECREMENT       shift and go to state 43
 
 
-state 85
+state 86
 
     (42) expression -> LRB expression RRB .
 
@@ -3302,13 +3387,13 @@ state 85
     COMMA           reduce using rule 42 (expression -> LRB expression RRB .)
 
 
-state 86
+state 87
 
     (45) expression -> LRB expression INCREMENT . RRB
     (43) expression -> expression INCREMENT .
 
   ! shift/reduce conflict for RRB resolved as shift
-    RRB             shift and go to state 100
+    RRB             shift and go to state 102
     INCREMENT       reduce using rule 43 (expression -> expression INCREMENT .)
     DECREMENT       reduce using rule 43 (expression -> expression INCREMENT .)
     MULTIPLY        reduce using rule 43 (expression -> expression INCREMENT .)
@@ -3329,13 +3414,13 @@ state 86
   ! RRB             [ reduce using rule 43 (expression -> expression INCREMENT .) ]
 
 
-state 87
+state 88
 
     (46) expression -> LRB expression DECREMENT . RRB
     (44) expression -> expression DECREMENT .
 
   ! shift/reduce conflict for RRB resolved as shift
-    RRB             shift and go to state 101
+    RRB             shift and go to state 103
     INCREMENT       reduce using rule 44 (expression -> expression DECREMENT .)
     DECREMENT       reduce using rule 44 (expression -> expression DECREMENT .)
     MULTIPLY        reduce using rule 44 (expression -> expression DECREMENT .)
@@ -3356,10 +3441,10 @@ state 87
   ! RRB             [ reduce using rule 44 (expression -> expression DECREMENT .) ]
 
 
-state 88
+state 89
 
-    (57) expression -> LRB NOT expression . RRB
-    (56) expression -> NOT expression .
+    (58) expression -> LRB NOT expression . RRB
+    (57) expression -> NOT expression .
     (19) expression -> expression . MULTIPLY expression
     (20) expression -> expression . DIVIDE expression
     (21) expression -> expression . PLUS expression
@@ -3377,25 +3462,25 @@ state 88
     (43) expression -> expression . INCREMENT
     (44) expression -> expression . DECREMENT
 
-    RRB             reduce using rule 56 (expression -> NOT expression .)
-    INCREMENT       reduce using rule 56 (expression -> NOT expression .)
-    DECREMENT       reduce using rule 56 (expression -> NOT expression .)
-    MULTIPLY        reduce using rule 56 (expression -> NOT expression .)
-    DIVIDE          reduce using rule 56 (expression -> NOT expression .)
-    PLUS            reduce using rule 56 (expression -> NOT expression .)
-    MINUS           reduce using rule 56 (expression -> NOT expression .)
-    POWER           reduce using rule 56 (expression -> NOT expression .)
-    EQUALEQUAL      reduce using rule 56 (expression -> NOT expression .)
-    NE              reduce using rule 56 (expression -> NOT expression .)
-    LT              reduce using rule 56 (expression -> NOT expression .)
-    LE              reduce using rule 56 (expression -> NOT expression .)
-    GT              reduce using rule 56 (expression -> NOT expression .)
-    GE              reduce using rule 56 (expression -> NOT expression .)
-    AND             reduce using rule 56 (expression -> NOT expression .)
-    OR              reduce using rule 56 (expression -> NOT expression .)
-    MOD             reduce using rule 56 (expression -> NOT expression .)
+    RRB             reduce using rule 57 (expression -> NOT expression .)
+    INCREMENT       reduce using rule 57 (expression -> NOT expression .)
+    DECREMENT       reduce using rule 57 (expression -> NOT expression .)
+    MULTIPLY        reduce using rule 57 (expression -> NOT expression .)
+    DIVIDE          reduce using rule 57 (expression -> NOT expression .)
+    PLUS            reduce using rule 57 (expression -> NOT expression .)
+    MINUS           reduce using rule 57 (expression -> NOT expression .)
+    POWER           reduce using rule 57 (expression -> NOT expression .)
+    EQUALEQUAL      reduce using rule 57 (expression -> NOT expression .)
+    NE              reduce using rule 57 (expression -> NOT expression .)
+    LT              reduce using rule 57 (expression -> NOT expression .)
+    LE              reduce using rule 57 (expression -> NOT expression .)
+    GT              reduce using rule 57 (expression -> NOT expression .)
+    GE              reduce using rule 57 (expression -> NOT expression .)
+    AND             reduce using rule 57 (expression -> NOT expression .)
+    OR              reduce using rule 57 (expression -> NOT expression .)
+    MOD             reduce using rule 57 (expression -> NOT expression .)
 
-  ! RRB             [ shift and go to state 102 ]
+  ! RRB             [ shift and go to state 104 ]
   ! MULTIPLY        [ shift and go to state 28 ]
   ! DIVIDE          [ shift and go to state 29 ]
   ! PLUS            [ shift and go to state 30 ]
@@ -3414,21 +3499,21 @@ state 88
   ! DECREMENT       [ shift and go to state 43 ]
 
 
-state 89
+state 90
 
     (54) expression -> IDENTIFIER DOT . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 103
-
-
-state 90
-
-    (39) expression -> DO LCB multiple . RCB WHILE LRB expression RRB
-
-    RCB             shift and go to state 104
+    IDENTIFIER      shift and go to state 105
 
 
 state 91
+
+    (39) expression -> DO LCB multiple . RCB WHILE LRB expression RRB
+
+    RCB             shift and go to state 106
+
+
+state 92
 
     (40) expression -> STRUCT IDENTIFIER LCB . multiple RCB
     (33) multiple -> . expression SEMICOLON multiple
@@ -3468,8 +3553,9 @@ state 91
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
     (8) var_declaration -> . TYPEINT IDENTIFIER EQUALS expression
     (9) var_declaration -> . TYPEDOUBLE IDENTIFIER EQUALS expression
     (10) var_declaration -> . TYPESTRING IDENTIFIER EQUALS expression
@@ -3503,14 +3589,14 @@ state 91
     TYPEBOOL        shift and go to state 25
     TYPECHAR        shift and go to state 26
 
-    multiple                       shift and go to state 105
+    multiple                       shift and go to state 107
     expression                     shift and go to state 4
     var_declaration                shift and go to state 5
     struct_dec                     shift and go to state 6
     var_assign                     shift and go to state 7
     struct_var_assign              shift and go to state 8
 
-state 92
+state 93
 
     (54) expression -> IDENTIFIER DOT IDENTIFIER .
     (41) struct_dec -> IDENTIFIER DOT IDENTIFIER . EQUALS expression
@@ -3532,10 +3618,84 @@ state 92
     MOD             reduce using rule 54 (expression -> IDENTIFIER DOT IDENTIFIER .)
     INCREMENT       reduce using rule 54 (expression -> IDENTIFIER DOT IDENTIFIER .)
     DECREMENT       reduce using rule 54 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    EQUALS          shift and go to state 106
+    EQUALS          shift and go to state 108
 
 
-state 93
+state 94
+
+    (56) expression -> IDENTIFIER EQUALS expression .
+    (19) expression -> expression . MULTIPLY expression
+    (20) expression -> expression . DIVIDE expression
+    (21) expression -> expression . PLUS expression
+    (22) expression -> expression . MINUS expression
+    (23) expression -> expression . POWER expression
+    (24) expression -> expression . EQUALEQUAL expression
+    (25) expression -> expression . NE expression
+    (26) expression -> expression . LT expression
+    (27) expression -> expression . LE expression
+    (28) expression -> expression . GT expression
+    (29) expression -> expression . GE expression
+    (30) expression -> expression . AND expression
+    (31) expression -> expression . OR expression
+    (32) expression -> expression . MOD expression
+    (43) expression -> expression . INCREMENT
+    (44) expression -> expression . DECREMENT
+
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
+  ! shift/reduce conflict for EQUALEQUAL resolved as shift
+  ! shift/reduce conflict for NE resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for LE resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for GE resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+  ! shift/reduce conflict for INCREMENT resolved as shift
+  ! shift/reduce conflict for DECREMENT resolved as shift
+    SEMICOLON       reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .)
+    RRB             reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .)
+    COMMA           reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .)
+    MULTIPLY        shift and go to state 28
+    DIVIDE          shift and go to state 29
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 31
+    POWER           shift and go to state 32
+    EQUALEQUAL      shift and go to state 33
+    NE              shift and go to state 34
+    LT              shift and go to state 35
+    LE              shift and go to state 36
+    GT              shift and go to state 37
+    GE              shift and go to state 38
+    AND             shift and go to state 39
+    OR              shift and go to state 40
+    MOD             shift and go to state 41
+    INCREMENT       shift and go to state 42
+    DECREMENT       shift and go to state 43
+
+  ! MULTIPLY        [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! DIVIDE          [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! PLUS            [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! MINUS           [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! POWER           [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! EQUALEQUAL      [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! NE              [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! LT              [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! LE              [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! GT              [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! GE              [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! AND             [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! OR              [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! MOD             [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! INCREMENT       [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+  ! DECREMENT       [ reduce using rule 56 (expression -> IDENTIFIER EQUALS expression .) ]
+
+
+state 95
 
     (8) var_declaration -> TYPEINT IDENTIFIER EQUALS . expression
     (3) expression -> . PRINT LRB optargs RRB
@@ -3569,8 +3729,9 @@ state 93
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -3586,9 +3747,9 @@ state 93
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 107
+    expression                     shift and go to state 109
 
-state 94
+state 96
 
     (9) var_declaration -> TYPEDOUBLE IDENTIFIER EQUALS . expression
     (3) expression -> . PRINT LRB optargs RRB
@@ -3622,8 +3783,9 @@ state 94
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -3639,9 +3801,9 @@ state 94
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 108
+    expression                     shift and go to state 110
 
-state 95
+state 97
 
     (10) var_declaration -> TYPESTRING IDENTIFIER EQUALS . expression
     (3) expression -> . PRINT LRB optargs RRB
@@ -3675,8 +3837,9 @@ state 95
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -3692,9 +3855,9 @@ state 95
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 109
+    expression                     shift and go to state 111
 
-state 96
+state 98
 
     (11) var_declaration -> TYPEBOOL IDENTIFIER EQUALS . expression
     (3) expression -> . PRINT LRB optargs RRB
@@ -3728,8 +3891,9 @@ state 96
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -3745,9 +3909,9 @@ state 96
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 110
+    expression                     shift and go to state 112
 
-state 97
+state 99
 
     (12) var_declaration -> TYPECHAR IDENTIFIER EQUALS . expression
     (3) expression -> . PRINT LRB optargs RRB
@@ -3781,8 +3945,9 @@ state 97
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -3798,9 +3963,9 @@ state 97
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 111
+    expression                     shift and go to state 113
 
-state 98
+state 100
 
     (3) expression -> PRINT LRB optargs RRB .
 
@@ -3825,7 +3990,7 @@ state 98
     COMMA           reduce using rule 3 (expression -> PRINT LRB optargs RRB .)
 
 
-state 99
+state 101
 
     (6) args -> expression COMMA . args
     (6) args -> . expression COMMA args
@@ -3861,8 +4026,9 @@ state 99
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -3878,10 +4044,10 @@ state 99
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 84
-    args                           shift and go to state 112
+    expression                     shift and go to state 85
+    args                           shift and go to state 114
 
-state 100
+state 102
 
     (45) expression -> LRB expression INCREMENT RRB .
 
@@ -3906,7 +4072,7 @@ state 100
     COMMA           reduce using rule 45 (expression -> LRB expression INCREMENT RRB .)
 
 
-state 101
+state 103
 
     (46) expression -> LRB expression DECREMENT RRB .
 
@@ -3931,32 +4097,32 @@ state 101
     COMMA           reduce using rule 46 (expression -> LRB expression DECREMENT RRB .)
 
 
-state 102
+state 104
 
-    (57) expression -> LRB NOT expression RRB .
+    (58) expression -> LRB NOT expression RRB .
 
-    SEMICOLON       reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    MULTIPLY        reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    DIVIDE          reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    PLUS            reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    MINUS           reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    POWER           reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    EQUALEQUAL      reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    NE              reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    LT              reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    LE              reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    GT              reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    GE              reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    AND             reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    OR              reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    MOD             reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    INCREMENT       reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    DECREMENT       reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    RRB             reduce using rule 57 (expression -> LRB NOT expression RRB .)
-    COMMA           reduce using rule 57 (expression -> LRB NOT expression RRB .)
+    SEMICOLON       reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    MULTIPLY        reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    DIVIDE          reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    PLUS            reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    MINUS           reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    POWER           reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    EQUALEQUAL      reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    NE              reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    LT              reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    LE              reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    GT              reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    GE              reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    AND             reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    OR              reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    MOD             reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    INCREMENT       reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    DECREMENT       reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    RRB             reduce using rule 58 (expression -> LRB NOT expression RRB .)
+    COMMA           reduce using rule 58 (expression -> LRB NOT expression RRB .)
 
 
-state 103
+state 105
 
     (54) expression -> IDENTIFIER DOT IDENTIFIER .
 
@@ -3981,21 +4147,21 @@ state 103
     COMMA           reduce using rule 54 (expression -> IDENTIFIER DOT IDENTIFIER .)
 
 
-state 104
+state 106
 
     (39) expression -> DO LCB multiple RCB . WHILE LRB expression RRB
 
-    WHILE           shift and go to state 113
+    WHILE           shift and go to state 115
 
 
-state 105
+state 107
 
     (40) expression -> STRUCT IDENTIFIER LCB multiple . RCB
 
-    RCB             shift and go to state 114
+    RCB             shift and go to state 116
 
 
-state 106
+state 108
 
     (41) struct_dec -> IDENTIFIER DOT IDENTIFIER EQUALS . expression
     (3) expression -> . PRINT LRB optargs RRB
@@ -4029,8 +4195,9 @@ state 106
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -4046,9 +4213,9 @@ state 106
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 115
+    expression                     shift and go to state 117
 
-state 107
+state 109
 
     (8) var_declaration -> TYPEINT IDENTIFIER EQUALS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -4087,7 +4254,7 @@ state 107
     DECREMENT       shift and go to state 43
 
 
-state 108
+state 110
 
     (9) var_declaration -> TYPEDOUBLE IDENTIFIER EQUALS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -4126,7 +4293,7 @@ state 108
     DECREMENT       shift and go to state 43
 
 
-state 109
+state 111
 
     (10) var_declaration -> TYPESTRING IDENTIFIER EQUALS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -4165,7 +4332,7 @@ state 109
     DECREMENT       shift and go to state 43
 
 
-state 110
+state 112
 
     (11) var_declaration -> TYPEBOOL IDENTIFIER EQUALS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -4204,7 +4371,7 @@ state 110
     DECREMENT       shift and go to state 43
 
 
-state 111
+state 113
 
     (12) var_declaration -> TYPECHAR IDENTIFIER EQUALS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -4243,21 +4410,21 @@ state 111
     DECREMENT       shift and go to state 43
 
 
-state 112
+state 114
 
     (6) args -> expression COMMA args .
 
     RRB             reduce using rule 6 (args -> expression COMMA args .)
 
 
-state 113
+state 115
 
     (39) expression -> DO LCB multiple RCB WHILE . LRB expression RRB
 
-    LRB             shift and go to state 116
+    LRB             shift and go to state 118
 
 
-state 114
+state 116
 
     (40) expression -> STRUCT IDENTIFIER LCB multiple RCB .
 
@@ -4282,7 +4449,7 @@ state 114
     COMMA           reduce using rule 40 (expression -> STRUCT IDENTIFIER LCB multiple RCB .)
 
 
-state 115
+state 117
 
     (41) struct_dec -> IDENTIFIER DOT IDENTIFIER EQUALS expression .
     (19) expression -> expression . MULTIPLY expression
@@ -4321,7 +4488,7 @@ state 115
     DECREMENT       shift and go to state 43
 
 
-state 116
+state 118
 
     (39) expression -> DO LCB multiple RCB WHILE LRB . expression RRB
     (3) expression -> . PRINT LRB optargs RRB
@@ -4355,8 +4522,9 @@ state 116
     (53) expression -> . IDENTIFIER
     (54) expression -> . IDENTIFIER DOT IDENTIFIER
     (55) expression -> . MINUS expression
-    (56) expression -> . NOT expression
-    (57) expression -> . LRB NOT expression RRB
+    (56) expression -> . IDENTIFIER EQUALS expression
+    (57) expression -> . NOT expression
+    (58) expression -> . LRB NOT expression RRB
 
     PRINT           shift and go to state 9
     DO              shift and go to state 12
@@ -4372,9 +4540,9 @@ state 116
     MINUS           shift and go to state 11
     NOT             shift and go to state 21
 
-    expression                     shift and go to state 117
+    expression                     shift and go to state 119
 
-state 117
+state 119
 
     (39) expression -> DO LCB multiple RCB WHILE LRB expression . RRB
     (19) expression -> expression . MULTIPLY expression
@@ -4394,7 +4562,7 @@ state 117
     (43) expression -> expression . INCREMENT
     (44) expression -> expression . DECREMENT
 
-    RRB             shift and go to state 118
+    RRB             shift and go to state 120
     MULTIPLY        shift and go to state 28
     DIVIDE          shift and go to state 29
     PLUS            shift and go to state 30
@@ -4413,7 +4581,7 @@ state 117
     DECREMENT       shift and go to state 43
 
 
-state 118
+state 120
 
     (39) expression -> DO LCB multiple RCB WHILE LRB expression RRB .
 
@@ -4440,24 +4608,40 @@ state 118
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for MULTIPLY in state 77 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 77 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 77 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 77 resolved as shift
-WARNING: shift/reduce conflict for POWER in state 77 resolved as shift
-WARNING: shift/reduce conflict for EQUALEQUAL in state 77 resolved as shift
-WARNING: shift/reduce conflict for NE in state 77 resolved as shift
-WARNING: shift/reduce conflict for LT in state 77 resolved as shift
-WARNING: shift/reduce conflict for LE in state 77 resolved as shift
-WARNING: shift/reduce conflict for GT in state 77 resolved as shift
-WARNING: shift/reduce conflict for GE in state 77 resolved as shift
-WARNING: shift/reduce conflict for AND in state 77 resolved as shift
-WARNING: shift/reduce conflict for OR in state 77 resolved as shift
-WARNING: shift/reduce conflict for MOD in state 77 resolved as shift
-WARNING: shift/reduce conflict for INCREMENT in state 77 resolved as shift
-WARNING: shift/reduce conflict for DECREMENT in state 77 resolved as shift
-WARNING: shift/reduce conflict for RRB in state 86 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 78 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 78 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 78 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 78 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 78 resolved as shift
+WARNING: shift/reduce conflict for EQUALEQUAL in state 78 resolved as shift
+WARNING: shift/reduce conflict for NE in state 78 resolved as shift
+WARNING: shift/reduce conflict for LT in state 78 resolved as shift
+WARNING: shift/reduce conflict for LE in state 78 resolved as shift
+WARNING: shift/reduce conflict for GT in state 78 resolved as shift
+WARNING: shift/reduce conflict for GE in state 78 resolved as shift
+WARNING: shift/reduce conflict for AND in state 78 resolved as shift
+WARNING: shift/reduce conflict for OR in state 78 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 78 resolved as shift
+WARNING: shift/reduce conflict for INCREMENT in state 78 resolved as shift
+WARNING: shift/reduce conflict for DECREMENT in state 78 resolved as shift
 WARNING: shift/reduce conflict for RRB in state 87 resolved as shift
+WARNING: shift/reduce conflict for RRB in state 88 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 94 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 94 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 94 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 94 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 94 resolved as shift
+WARNING: shift/reduce conflict for EQUALEQUAL in state 94 resolved as shift
+WARNING: shift/reduce conflict for NE in state 94 resolved as shift
+WARNING: shift/reduce conflict for LT in state 94 resolved as shift
+WARNING: shift/reduce conflict for LE in state 94 resolved as shift
+WARNING: shift/reduce conflict for GT in state 94 resolved as shift
+WARNING: shift/reduce conflict for GE in state 94 resolved as shift
+WARNING: shift/reduce conflict for AND in state 94 resolved as shift
+WARNING: shift/reduce conflict for OR in state 94 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 94 resolved as shift
+WARNING: shift/reduce conflict for INCREMENT in state 94 resolved as shift
+WARNING: shift/reduce conflict for DECREMENT in state 94 resolved as shift
 WARNING: reduce/reduce conflict in state 0 resolved using rule (multiple -> <empty>)
 WARNING: rejected rule (empty -> <empty>) in state 0
 WARNING: Rule (empty -> <empty>) is never reduced
